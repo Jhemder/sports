@@ -1,0 +1,31 @@
+server:
+  port: ${PORT:${SERVER_PORT:0}}  # Puerto aleatorio o asignado
+
+spring:
+  application:
+    name: ms-almacen-service  # Nombre del microservicio
+  profiles:
+    active: development  # Perfil a usar desde el Config Server
+  config:
+    import: optional:configserver:http://root:123456@localhost:7070  # Config Server con auth
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
